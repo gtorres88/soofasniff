@@ -1,4 +1,16 @@
 import telnetlib
+import logging
+
+
+logger = logging.getLogger()
+logging.basicConfig(
+    filename=None,
+    format='%(asctime)s |%(levelname)7s |%(name)20s | %(message)s')
+logger.setLevel(logging.DEBUG)
+
+
+import kisresponse
+
 
 
 T = telnetlib.Telnet()
@@ -27,8 +39,6 @@ class KismetConnect(object):
 		r = self._connection.read_until('\n')
 		return r.strip('\n')
 
-
-class Response(object):
 
 if __name__ == '__main__':
 	K = KismetConnect()
