@@ -57,6 +57,19 @@ class ProtocolsResponse(KismetResponse):
     key = '*PROTOCOLS'
 
 @response
+class ClientResponse(KismetResponse):
+
+    key = '*CLIENT'
+
+    def __init__(self, text):
+        super(ClientResponse, self).__init__(text)
+        #params in a list, strip out prefix
+        self.params = self._text.split()[1:]
+        for p in list(self.params):
+            if p == '':
+                self.params.remove(p)
+
+@response
 class UnknownResponse(KismetResponse):
     '''Unkown Response, not implemented, should always be last'''
 
