@@ -9,7 +9,7 @@ logging.basicConfig(
     filename=None,
     format='%(asctime)s |%(levelname)7s |%(name)20s | %(message)s')
 
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 from kisresponse import *
 
@@ -64,6 +64,7 @@ def main(argv):
     K.send_cmd("ENABLE CLIENT mac,lasttime")
     
     try:
+        logger.info("Consuming from server. Press Ctrl-C to end")
         while(1):
 
             #get incoming messages
@@ -73,12 +74,16 @@ def main(argv):
             if (isinstance(r, ClientResponse)):
                 mac = r.params[0]
                 time = datetime.datetime.fromtimestamp(int(r.params[1]))
-                towrite = "%s, %s" % (r.params[0],str(time))
+                towrite = "%s,%s" % (r.params[0],str(time))
                 logger.debug("Writing to CSV: %s" % towrite)
                 csv.write(towrite + "\n")
     except KeyboardInterrupt:
-        csv.close()
         logger.info("Crtl-C caught. Exiting")
+        logger.info("Close CSV file")
+        csv.close()
+        logger.info("Closing Telnet connection")
+        K.close()
+        
 
 
 if __name__ == '__main__':

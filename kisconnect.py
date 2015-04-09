@@ -21,6 +21,12 @@ class KismetConnect(object):
         self._wait_for_intro()
         self._count = 0
 
+    def close(self):
+        '''close connection'''
+        if (self._opened):
+            self._connection.close()
+            self._opened = False
+
     def process_incoming(self):
         '''Processes and returns messages in object format'''
         if (self._opened is False):
@@ -41,6 +47,7 @@ class KismetConnect(object):
         cmdstring = "!%d %s" % (self._count, cmd)
         logger.debug("Sending Command: %s" % cmdstring)
         self._connection.write(cmdstring + "\n")
+        self._count =+ 1
 
     def _wait_for_intro(self):
         '''waits for the kismet intro messages'''
