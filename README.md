@@ -1,7 +1,4 @@
-% SoofaSniff
-% Gabe Torres
-
-# Description
+# SoofaSniff
 
 Simple script that connects to a kismet server and prints out MAC and TIME
 entries for each client detected in CSV format
