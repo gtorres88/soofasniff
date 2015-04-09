@@ -55,7 +55,7 @@ def main(argv):
 
     csv = open(outputFile, "w")
 
-    K = KismetConnect()
+    K = KismetConnect(host = server, port = port)
     K.open()
 
     #Stop automatic time messages
@@ -65,14 +65,17 @@ def main(argv):
     
     try:
         while(1):
+
+            #get incoming messages
             r = K.process_incoming()
 
+            #if ClientResponse, process it
             if (isinstance(r, ClientResponse)):
                 mac = r.params[0]
                 time = datetime.datetime.fromtimestamp(int(r.params[1]))
-                towrite = "%s, %s\n" % (r.params[0],str(time))
+                towrite = "%s, %s" % (r.params[0],str(time))
                 logger.debug("Writing to CSV: %s" % towrite)
-                csv.write(towrite)
+                csv.write(towrite + "\n")
     except KeyboardInterrupt:
         csv.close()
         logger.info("Crtl-C caught. Exiting")
